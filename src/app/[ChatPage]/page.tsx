@@ -1,9 +1,9 @@
-import Login from "@/components/Auth/Login/Login";
+import Chat from "@/components/Chat/Chat";
 import styles from "./page.module.scss";
-export default function HomePage() {
+export default function ChatPage() {
   return (
     <div className={styles.layout}>
-      <Login />
+      <Chat />
     </div>
   );
 }
