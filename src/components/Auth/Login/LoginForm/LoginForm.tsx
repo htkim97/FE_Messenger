@@ -1,76 +1,42 @@
 "use client";
-
-import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
-import { useState } from "react";
-import axios, { AxiosError } from "axios";
-import styles from "./LoginForm.module.scss";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import styles from "./LoginForm.module.scss";
 
-export default function LoginForm() {
-  const [show, setShow] = useState(false);
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+const LoginForm = () => {
+  const [userId, setUserId] = useState("");
   const router = useRouter();
-  const handleClick = () => setShow(!show);
 
-  const handleLogin = () => {
-    router.push("/ChatPage");
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    if (response.ok) {
+      const { id } = await response.json();
+      router.push(`/${id}`);
+    } else {
+      console.error("Login failed");
+    }
   };
 
-  // const handleLogin = async () => {
-  //   try {
-  //     const response = await axios.post("/api/login", {
-  //       id,
-  //       password,
-  //     });
-
-  //     if (response.status === 200) {
-  //       const data = response.data;
-
-  //       console.log("로그인 성공 ::::", data);
-  //       router.push("/chat");
-  //     }
-  //   } catch (err) {
-  //     if (axios.isAxiosError(err)) {
-  //       setError(err.response?.data.message || "로그인 실패");
-  //     } else {
-  //       setError("서버 오류 발생");
-  //     }
-  //   }
-  // };
-
   return (
-    <div className={styles.layout}>
-      <div className={styles.inputLayout}>
-        <div className={styles.idInput}>
-          <Input
-            placeholder="Enter ID"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-          />
-        </div>
-        <div>
-          <InputGroup size="md">
-            <Input
-              pr="4.5rem"
-              type={show ? "text" : "password"}
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? "Hide" : "Show"}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </div>
-      </div>
-      {error && <div className={styles.error}>{error}</div>}{" "}
-      <div className={styles.submitBtn}>
-        <Button onClick={handleLogin}>로그인</Button>{" "}
-      </div>
-    </div>
+    <form onSubmit={handleLogin} className={styles.layout}>
+      <input
+        type="text"
+        value={userId}
+        onChange={(e) => setUserId(e.target.value)}
+        placeholder="아이디를 입력하세요"
+        required
+      />
+      <div className={styles.submitBtn}>로그인</div>
+    </form>
   );
-}
+};
+
+export default LoginForm;

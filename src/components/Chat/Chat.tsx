@@ -1,40 +1,54 @@
 "use client";
 import { useState, FormEvent } from "react";
 import styles from "./Chat.module.scss";
+import Message from "../Message/Message";
 
-interface Message {
-  id: number;
-  user: string;
-  text: string;
+interface ChatProps {
+  userId: string | string[];
 }
 
-export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState<string>("");
-  const [userName, setUserName] = useState<string>("User");
+export default function Chat({ userId }: ChatProps) {
+  const [messages, setMessages] = useState<
+    { id: number; userId: string; text: string }[]
+  >([]);
+  const [newMessage, setNewMessage] = useState("");
 
-  const handleSendMessage = (e: FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
+    console.log(userId);
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage) return;
 
-    const newMsg: Message = {
-      id: Date.now(),
-      user: userName,
-      text: newMessage.trim(),
-    };
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: prevMessages.length + 1,
+        userId: userId as string,
+        text: newMessage,
+      },
+    ]);
 
-    setMessages([...messages, newMsg]);
     setNewMessage("");
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.chatBox}>
-        <div className={styles.messages}>
-          {messages.map((msg) => (
-            <div key={msg.id} className={styles.message}>
-              <strong>{msg.user}: </strong> {msg.text}
-            </div>
+        <h1>{userId}</h1>
+        <div
+          style={{
+            maxHeight: "400px",
+            overflowY: "scroll",
+            border: "1px solid #ccc",
+            padding: "10px",
+            marginTop: "10px",
+          }}
+        >
+          {messages.map((message) => (
+            <Message
+              key={message.id}
+              userId={message.userId}
+              text={message.text}
+            />
           ))}
         </div>
         <form onSubmit={handleSendMessage} className={styles.form}>

@@ -1,16 +1,10 @@
-@import "../../../../styles/pxToRem.scss";
-
 .layout {
   flex-direction: column;
-}
-
-.idInput {
-  margin-bottom: px(10);
+  display: flex;
 }
 
 .submitBtn {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: px(10);
+  margin-top: 6px;
 }
