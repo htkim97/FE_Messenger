@@ -1,0 +1,22 @@
+@import "../../styles/pxToRem.scss";
+
+.first {
+  display: flex;
+  gap: px(5);
+}
+
+.second {
+  display: flex;
+  margin-left: px(30);
+}
+
+.point {
+  color: #7300ff;
+  font-weight: bold;
+  font-size: px(36);
+}
+
+.font {
+  font-weight: bold;
+  font-size: px(36);
+}

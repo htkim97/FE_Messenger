@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.scss";
+import Logo from "@/components/Logo/Logo";
 
-const LoginForm = () => {
+export default function LoginForm() {
   const [userId, setUserId] = useState("");
   const router = useRouter();
 
@@ -26,17 +27,25 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleLogin} className={styles.layout}>
-      <input
-        type="text"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-        placeholder="아이디를 입력하세요"
-        required
-      />
-      <div className={styles.submitBtn}>로그인</div>
-    </form>
+    <div style={{ flexDirection: "column" }}>
+      <div className={styles.logoWrapper}>
+        <Logo />
+      </div>
+      <div className={styles.layout}>
+        <form onSubmit={handleLogin} className={styles.formLayout}>
+          <input
+            type="text"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            placeholder="사용자 이름"
+            required
+            className={styles.loginForm}
+          />
+          <button type="submit" className={styles.submitBtn}>
+            <div className={styles.login}>로그인</div>
+          </button>
+        </form>
+      </div>
+    </div>
   );
-};
-
-export default LoginForm;
+}

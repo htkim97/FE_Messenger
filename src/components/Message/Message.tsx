@@ -5,12 +5,10 @@ interface MessageProps {
   text: string;
 }
 
-const Message: React.FC<MessageProps> = ({ userId, text }) => {
+export default function Message({ userId, text }: MessageProps) {
   return (
     <div>
       <strong>{userId}:</strong> {text}
     </div>
   );
-};
-
-export default Message;
+}
