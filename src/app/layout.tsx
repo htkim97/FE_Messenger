@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "./providers";
 import { fonts } from "../../public/fonts/fonts";
+import AuthContext from "@/context/AuthContext";
 
 const geistSans = localFont({
   src: "../../public/fonts/GeistVF.woff",
@@ -28,7 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={fonts.rubik.variable}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Providers>{children}</Providers>
+        <AuthContext>
+          <Providers>{children}</Providers>
+        </AuthContext>
       </body>
     </html>
   );

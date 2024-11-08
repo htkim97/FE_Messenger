@@ -1,51 +1,30 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.scss";
 import Logo from "@/components/Logo/Logo";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function LoginForm() {
-  const [userId, setUserId] = useState("");
   const router = useRouter();
+  const { data: session } = useSession();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId }),
-    });
-
-    if (response.ok) {
-      const { id } = await response.json();
-      router.push(`/${id}`);
-    } else {
-      console.error("Login failed");
+  useEffect(() => {
+    if (session && session.user) {
+      // session.user.id로 동적 경로로 이동
+      router.push(`/${session.user?.name}`);
     }
-  };
+  }, [session, router]);
 
   return (
     <div style={{ flexDirection: "column" }}>
       <div className={styles.logoWrapper}>
         <Logo />
       </div>
-      <div className={styles.layout}>
-        <form onSubmit={handleLogin} className={styles.formLayout}>
-          <input
-            type="text"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-            placeholder="사용자 이름"
-            required
-            className={styles.loginForm}
-          />
-          <button type="submit" className={styles.submitBtn}>
-            <div className={styles.login}>로그인</div>
-          </button>
-        </form>
-      </div>
+
+      <button onClick={() => signIn("google")} className={styles.submitBtn}>
+        <div className={styles.login}>로그인</div>
+      </button>
     </div>
   );
 }

@@ -1,20 +1,13 @@
+"use client";
 import Chat from "@/components/Chat/Chat";
 import styles from "./page.module.scss";
-import { NewChatIcon } from "@/constants/icon";
+import Header from "@/components/Header/Header";
 
-interface ChatPageProps {
-  params: {
-    userId: string;
-  };
-}
-
-export default function ChatPage({ params }: ChatPageProps) {
-  const { userId } = params;
+export default function ChatPage() {
   return (
     <div className={styles.layout}>
       <div className={styles.header}>
-        <div className={styles.userName}>{userId}</div>
-        <div className={styles.newChatBtn}></div>
+        <Header />
       </div>
 
       <div className={styles.input}></div>
